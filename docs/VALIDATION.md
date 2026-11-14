@@ -20,7 +20,7 @@ The template is stored at `docs/ci-workflow.example.yml`, not in the active work
 
 ## Export validation scope
 
-Locally run during export: Go race suite on macOS, Windows amd64 program and fixture cross-compilation, Python unit/compile checks, Swift codec/CLI synthetic round-trip, PowerShell syntax parsing and example-config validation, Bash launcher syntax, Go vet (host and Windows), and YAML parsing. See the handoff report for any check unavailable locally. CI configuration is not a claim that hosted jobs have run.
+Locally run during export: Go race suite on macOS, Windows amd64 program and fixture cross-compilation, Python unit/compile checks, Swift codec/CLI synthetic round-trip, terminal QR raster reconstruction/readback and single-line URI checks, pre-mint terminal-space checks, PowerShell syntax parsing and example-config validation, Bash launcher syntax, Go vet (host and Windows), and YAML parsing. See the handoff report for any check unavailable locally. CI configuration is not a claim that hosted jobs have run.
 
 Production Go logic is copied unchanged. Test-only fixtures use example addresses/domains/usernames. Swift tooling adds private initial permissions, argument validation and overwrite refusal; Python and Windows management scripts are generalized separately.
 

@@ -34,11 +34,11 @@ Go is pinned through `go.mod` (toolchain Go 1.27.4). See [validation](docs/VALID
 - Root: Go proxy and tests; public module `github.com/jakkzz/openmausbot-tailnet-bridge`.
 - `examples/`: sample Windows config and isolated Linux Traefik configuration.
 - `scripts/`: Windows private staging, limited task, narrow firewall, update/rollback and removal.
-- `tools/`: Python invite re-addressing and **source-only** macOS Swift QR codec.
+- `tools/`: Python invite re-addressing, one-line/terminal QR display, and **source-only** macOS Swift QR utilities.
 - `docs/`: design, installation, privacy, pairing and maintenance.
 - `docs/ci-workflow.example.yml`: inactive CI template for Ubuntu/Windows tests, cross-build and macOS QR checks. See [activation instructions](docs/VALIDATION.md#activating-ci).
 
-No live configuration, native screenshots, pairing material, DNS credentials, binaries or deployment state is included. Optional Cua automation and machine-specific launchers are intentionally omitted; use the native owner UI manually. A new portable `scripts/pair-phone.command` can guide private invite creation and wait for human phone readiness without replacing any existing launcher. Nothing in this package installs or updates Cua or changes shell/security profiles.
+No live configuration, native screenshots, pairing material, DNS credentials, binaries or deployment state is included. Optional Cua automation and machine-specific launchers are intentionally omitted; use the native owner UI manually. A new portable `scripts/pair-phone.command` can guide private invite creation, wait for human phone readiness, and display the fresh link plus a QR directly in the terminal without replacing any existing launcher. Nothing in this package installs or updates Cua or changes shell/security profiles.
 
 **Limitations:** custom protocol compatibility, not vendor-supported. Re-review after native app updates. Protected native-app access and real-phone end-to-end behavior are **not proven by unit tests**.
 

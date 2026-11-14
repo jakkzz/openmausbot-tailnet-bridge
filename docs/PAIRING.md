@@ -21,7 +21,21 @@ Alternatively create a **gitignored owner-private JSON** file, e.g. `private/inv
 5. Turn off phone Wi-Fi, leave the tailnet connected, and verify reconnection on cellular. Confirm a harmless Windows-local conversation belongs to **This computer**, not another gateway/shared workspace.
 6. Exercise separately approved native permissions manually. Pairing is not proof that protected local application, screen, filesystem or terminal access works. Do not claim completion until the actual phone passes the checklist.
 
-Optional macOS one-click entry: double-click the **new** `scripts/pair-phone.command` (or run it with Bash). It resolves the project relative to itself, reads `private/invite.private.json`, waits for phone readiness **before** asking for a fresh native screenshot, and requests explicit clipboard consent. Each attempt uses a new gitignored `private/invites/session-*` output directory, overriding the configured output directory for this launcher only. It sounds a local macOS alert when ready, then asks you to paste immediately; there is no post-generation readiness delay. It does not install, replace or modify any existing Desktop launcher, automate the owner UI, or treat pressing Return as proof of successful pairing.
+Optional macOS one-click entry: double-click the **new** `scripts/pair-phone.command` (or run it with Bash). It resolves the project relative to itself, reads `private/invite.private.json`, waits for phone readiness **before** asking for a fresh native screenshot, and requests explicit clipboard consent. Each attempt uses a new gitignored `private/invites/session-*` output directory, overriding the configured output directory for this launcher only. It sounds a local macOS alert when ready, displays the one-line link and terminal QR, then asks you to scan or paste immediately; there is no post-generation readiness delay. It does not install, replace or modify any existing Desktop launcher, automate the owner UI, or treat pressing Return as proof of successful pairing.
+
+## Terminal QR and one-line link
+
+The Mac launcher now prints a **single logical-line invitation** and an ANSI black/white QR directly in the terminal. Your terminal may visually soft-wrap the long URI; the script does not insert line breaks into it. The QR uses Unicode half-block cells, a white quiet zone, and compact QR correction level L. The saved PNG remains available.
+
+To redisplay a still-valid generated invitation without issuing another code:
+
+```sh
+python3 tools/show-invite.py private/invites/session-1/invite.txt
+```
+
+This is an explicit secret-display action: terminal output and scrollback contain the short-lived pairing credential. Do not record it, redirect it to service logs, attach it to an issue, or commit it. Default invite generation still withholds credential values.
+
+The launcher compiles the local Swift renderer and checks terminal space **before** you open a fresh native pairing window. Enlarge/maximize the terminal or reduce font size when prompted (typically at least 80 columns and 43 rows). No external QR package is required. The renderer is cached under gitignored `.cache/`; only its source is published. If an unusually long invite needs more space, widen the terminal and redisplay the same still-valid private file; printing cannot extend its native expiry.
 
 ## Optional legacy automation intentionally omitted
 

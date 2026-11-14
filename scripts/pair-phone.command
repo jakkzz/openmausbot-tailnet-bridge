@@ -9,6 +9,14 @@ if [[ ! -f private/invite.private.json ]]; then
     read -r -p 'Press Return to close. ' _
     exit 1
 fi
+# Compile/check before the owner opens a short-lived pairing window.
+while true; do
+    if python3 tools/show-invite.py --preflight; then break; else code=$?; fi
+    if [[ "$code" != 2 ]]; then exit 1; fi
+    read -r -p 'Enlarge this terminal, then Return to check again (q to quit): ' reply
+    [[ "$reply" == q || "$reply" == Q ]] && exit 0
+done
+printf '%s\n' 'The fresh private link and a QR will be printed in this terminal; do not record or publish it.'
 printf '%s\n' 'Keep Windows, the gateway and phone awake and connected.' 'The original app, profiles and existing Desktop launcher will not be changed.' 'First open the native phone app Paste link field.'
 read -r -p 'Press Return only when the PHONE is ready to paste: ' _
 printf '%s\n' 'Now open a FRESH genuine native owner pairing window and transfer its screenshot privately.' 'The native invitation has a short lifetime; do not wait after generating it.'
@@ -30,5 +38,9 @@ fi
 if [[ -x /usr/bin/afplay && -f /System/Library/Sounds/Glass.aiff ]]; then
     /usr/bin/afplay /System/Library/Sounds/Glass.aiff || true
 fi
-printf '%s\n' 'PASTE NOW in the native phone app, or scan the generated private QR before expiry.' 'Then run the manual cellular/workspace/permission acceptance checks and clear sensitive clipboard/output.'
-read -r -p 'Press Return to close after pasting: ' _
+printf '\033[2J\033[H'
+if ! python3 tools/show-invite.py "$output/invite.txt"; then
+    printf '%s\n' 'Private output was created, but terminal display needs attention. Inspect the diagnostic above.'
+fi
+printf '%s\n' 'SCAN OR PASTE NOW before the native expiry. Then clear sensitive clipboard/terminal output.'
+read -r -p 'Press Return to close after scanning/pasting: ' _
