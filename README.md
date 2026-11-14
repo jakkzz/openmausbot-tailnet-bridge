@@ -42,4 +42,4 @@ No live configuration, native screenshots, pairing material, DNS credentials, bi
 
 **Limitations:** custom protocol compatibility, not vendor-supported. Re-review after native app updates. Protected native-app access and real-phone end-to-end behavior are **not proven by unit tests**.
 
-**License:** the owner has not selected a license. No license grant is added by this export; dependency licenses remain their respective owners'.
+**License:** [MIT](LICENSE), covering this standalone bridge and its original tooling/documentation. OpenMausBot and third-party dependencies retain their own licenses.
