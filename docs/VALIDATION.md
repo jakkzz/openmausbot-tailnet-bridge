@@ -22,6 +22,8 @@ The template is stored at `docs/ci-workflow.example.yml`, not in the active work
 
 Locally run during export: Go race suite on macOS, Windows amd64 program and fixture cross-compilation, Python unit/compile checks, Swift codec/CLI synthetic round-trip, terminal QR raster reconstruction/readback and single-line URI checks, pre-mint terminal-space checks, PowerShell syntax parsing and example-config validation, Bash launcher syntax, Go vet (host and Windows), and YAML parsing. See the handoff report for any check unavailable locally. CI configuration is not a claim that hosted jobs have run.
 
+A local synthetic iTerm2 window was captured through native window automation, and its actual rendered inline PNG decoded to the exact input invitation. This catches real font/line-spacing defects that an idealized text-grid test cannot. The solid-cell fallback has raster round-trip coverage but has not been visually accepted on every terminal/font. Operator camera-scanning checks remain necessary.
+
 Production Go logic is copied unchanged. Test-only fixtures use example addresses/domains/usernames. Swift tooling adds private initial permissions, argument validation and overwrite refusal; Python and Windows management scripts are generalized separately.
 
 ## Human acceptance checklist (not claimed complete)

@@ -25,7 +25,7 @@ Optional macOS one-click entry: double-click the **new** `scripts/pair-phone.com
 
 ## Terminal QR and one-line link
 
-The Mac launcher now prints a **single logical-line invitation** and an ANSI black/white QR directly in the terminal. Your terminal may visually soft-wrap the long URI; the script does not insert line breaks into it. The QR uses Unicode half-block cells, a white quiet zone, and compact QR correction level L. The saved PNG remains available.
+The Mac launcher prints a **single logical-line invitation** and a QR directly in the terminal. Your terminal may visually soft-wrap the long URI; the script does not insert line breaks into it. In a direct iTerm2 session it renders a PNG with preserved aspect ratio, independent of font glyphs and line spacing. Otherwise it uses solid ANSI background cells (two spaces per module), never half-block glyphs. Both retain a white quiet zone and compact QR correction level L. The saved PNG remains available.
 
 To redisplay a still-valid generated invitation without issuing another code:
 
@@ -35,7 +35,9 @@ python3 tools/show-invite.py private/invites/session-1/invite.txt
 
 This is an explicit secret-display action: terminal output and scrollback contain the short-lived pairing credential. Do not record it, redirect it to service logs, attach it to an issue, or commit it. Default invite generation still withholds credential values.
 
-The launcher compiles the local Swift renderer and checks terminal space **before** you open a fresh native pairing window. Enlarge/maximize the terminal or reduce font size when prompted (typically at least 80 columns and 43 rows). No external QR package is required. The renderer is cached under gitignored `.cache/`; only its source is published. If an unusually long invite needs more space, widen the terminal and redisplay the same still-valid private file; printing cannot extend its native expiry.
+The launcher compiles the local Swift renderer and checks terminal space **before** you open a fresh native pairing window. Direct iTerm2 image mode needs at least 64 columns and 28 rows and automatically fits a square image. The portable solid-cell mode needs substantially more space (typically 158 columns and 82 rows for a full invite); maximize or reduce font size when prompted. No external QR package is required. The renderer is cached under gitignored `.cache/`; only its source is published. If an unusually long invite needs more space, resize and redisplay the still-valid file; printing cannot extend native expiry.
+
+`--format ansi` explicitly selects solid cells. `--format png` is only for a terminal known to support iTerm2 inline images. Automatic image selection is disabled under tmux/screen and for unknown terminal programs rather than changing their settings or assuming image passthrough. A nested TUI may therefore need solid mode or a direct iTerm2 window.
 
 ## Optional legacy automation intentionally omitted
 

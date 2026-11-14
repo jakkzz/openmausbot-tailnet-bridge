@@ -17,6 +17,7 @@ flowchart LR
 2. Build and install with [the step-by-step guide](docs/INSTALL.md). All domains, IPs and usernames in examples are fictional; replace them privately.
 3. Use [owner-UI pairing](docs/PAIRING.md), then perform the actual-phone acceptance checks.
 4. Keep [update/uninstall instructions](docs/MAINTENANCE.md) available.
+5. For desktop clients, read [computer-to-computer pairing](docs/COMPUTER-PAIRING.md): it needs a separate host-issued server code and is **not implemented by the phone launcher**.
 
 The Go proxy retains native bearer authentication, rejects browser Origins, validates the gateway peer/Host/HTTPS marker, strips private authority headers, and verifies Windows pipe server/parent identity before sending application bytes. Only successful routing metadata changes; non-routing credentials and keys remain native-owned. There is no TCP upstream fallback.
 
