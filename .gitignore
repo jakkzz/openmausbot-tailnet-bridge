@@ -1,0 +1,26 @@
+# Local configuration, credentials and generated pairing material
+private/
+*.private.json
+bridge.json
+bridge.windows.json
+invites/
+*.png
+*.jpg
+*.jpeg
+*.qr
+*.log
+*.previous
+*.new
+*.tmp
+# Build/tool caches and binaries
+dist/
+artifacts/
+.tools/
+.cache/
+__pycache__/
+*.py[cod]
+tools/phone-qr
+*.exe
+*.dll
+*.test
+.DS_Store

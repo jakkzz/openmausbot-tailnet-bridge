@@ -1,0 +1,6 @@
+{
+  "listen": "100.64.0.10:18798",
+  "gateway_ip": "100.64.0.20",
+  "public_origin": "https://phone.example.com",
+  "expected_exe": "C:\\Users\\ExampleUser\\AppData\\Local\\Programs\\openmausbot\\OpenMausBot.exe"
+}

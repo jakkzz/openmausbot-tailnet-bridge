@@ -1,0 +1,18 @@
+# Merge manually into an operator-managed Traefik configuration.
+# Bind the host/network-namespace listener to the gateway's tailnet address only.
+entryPoints:
+  phone-bridge:
+    address: "100.64.0.20:443"
+providers:
+  file:
+    directory: /etc/traefik/bridge-rules
+    watch: true
+certificatesResolvers:
+  operator-dns:
+    acme:
+      email: operator@example.com
+      storage: /var/lib/traefik/bridge-acme.json
+      dnsChallenge:
+        provider: REPLACE_WITH_YOUR_DNS_PROVIDER
+# Credentials are supplied by the operator, outside this package.
+# Do not enable trust of arbitrary client-supplied forwarded headers.

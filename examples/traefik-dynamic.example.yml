@@ -1,0 +1,29 @@
+http:
+  routers:
+    phone-bridge:
+      entryPoints: [phone-bridge]
+      rule: "Host(`phone.example.com`)"
+      service: phone-bridge
+      middlewares: [phone-bridge-tailnet]
+      tls:
+        certResolver: operator-dns
+  middlewares:
+    phone-bridge-tailnet:
+      ipAllowList:
+        sourceRange: ["100.64.0.0/10", "fd7a:115c:a1e0::/48"]
+        # No ipStrategy: use the actual peer, not a client forwarding header.
+  services:
+    phone-bridge:
+      loadBalancer:
+        passHostHeader: true
+        serversTransport: phone-bridge
+        responseForwarding:
+          flushInterval: "-1ms"
+        servers:
+          - url: http://100.64.0.10:18798
+  serversTransports:
+    phone-bridge:
+      forwardingTimeouts:
+        dialTimeout: 5s
+        responseHeaderTimeout: 110s
+        idleConnTimeout: 60s
