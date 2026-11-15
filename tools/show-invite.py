@@ -53,10 +53,22 @@ def display_format(requested, env=None):
     return 'png' if direct and iterm else 'ansi'
 
 
+def fitted_format(requested, actual, required, tty):
+    mode = display_format(requested)
+    columns, rows = (64, 28) if mode == 'png' else (required['columns'], required['rows'] + 3)
+    if requested == 'auto' and tty and sys.platform == 'darwin' and (actual.columns < columns or actual.lines < rows):
+        return 'window'  # Reliable square pixels rather than an enormous or distorted text QR.
+    return mode
+
+
+def preview_available():
+    return Path('/usr/bin/open').exists() and any(Path(p).exists() for p in ['/System/Applications/Preview.app','/Applications/Preview.app'])
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('input', type=Path, nargs='?', help='private invitation text file')
-    parser.add_argument('--format', choices=['auto', 'ansi', 'png'], default='auto')
+    parser.add_argument('--format', choices=['auto', 'ansi', 'png', 'window'], default='auto')
     parser.add_argument('--check', action='store_true', help='compile the local renderer before minting')
     parser.add_argument('--preflight', action='store_true', help='check terminal space before minting')
     args = parser.parse_args()
@@ -70,10 +82,17 @@ def main():
         measured = subprocess.run([str(binary), '--measure', str(args.input)],
             capture_output=True, text=True, check=True, timeout=15)
         required = json.loads(measured.stdout)
+    actual = shutil.get_terminal_size(fallback=(80, 28))
+    mode = fitted_format(args.format, actual, required, sys.stdout.isatty())
+    if mode == 'window' and not preview_available():
+        raise ValueError('Native PNG viewer unavailable')
     if args.check and not args.preflight:
         print('Local terminal QR renderer ready; no invite displayed.')
         return 0
     if args.preflight:
+        if mode == 'window':
+            print('Normal-size terminal: link stays here; a square QR will open in Preview. No resizing needed.')
+            return 0
         if sys.stdout.isatty():
             actual = shutil.get_terminal_size()
             columns, rows = (64, 28) if mode == 'png' else (required['columns'], required['rows'] + 3)
@@ -93,7 +112,16 @@ def main():
             print(f'Solid QR needs {required["columns"]} columns × {required["rows"] + 2} rows. Enlarge the terminal and rerun this display command; it does not mint another invite.')
             return 2
     print('\nScan in MausBot; single use, valid only until the native deadline:', flush=True)
-    if mode == 'png':
+    if mode == 'window':
+        # Keep this private file alive after open(1) returns; Preview loads asynchronously.
+        folder = Path(tempfile.mkdtemp(prefix='qr-', dir=args.input.resolve().parent))
+        png = folder / 'pairing.png'
+        subprocess.run([str(binary), '--png', str(args.input), str(png)], check=True, timeout=15)
+        png.chmod(0o600)
+        subprocess.run(['/usr/bin/open', '-a', 'Preview', str(png)], check=True, timeout=15,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        print('Square QR opened in Preview; scan that image, or paste the copied link. No terminal resize needed.', flush=True)
+    elif mode == 'png':
         with tempfile.TemporaryDirectory(prefix='private-terminal-qr-') as temp:
             png = Path(temp) / 'pairing.png'
             subprocess.run([str(binary), '--png', str(args.input), str(png)], check=True, timeout=15)
